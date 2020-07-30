@@ -4,12 +4,7 @@ const STATUS_URL = "https://discordapp.com/api/v6/users/@me/settings";
 
 async function loop() {
 	for (let anim of config.animation) {
-		let res = await doRequest(anim.text, anim.emojiID, anim.emojiName).catch(console.error);
-		if (!res) {
-			// Die
-			return;
-		}
-
+		await doRequest(anim.text, anim.emojiID, anim.emojiName).catch(console.error);
 		await new Promise(p => setTimeout(p, anim.timeout));
 	}
 
