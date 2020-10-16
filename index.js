@@ -1,6 +1,6 @@
 const request = require("request");
 const config = require("./config.json");
-const STATUS_URL = "https://discordapp.com/api/v6/users/@me/settings";
+const STATUS_URL = "https://discordapp.com/api/v8/users/@me/settings";
 
 async function loop() {
 	for (let anim of config.animation) {
