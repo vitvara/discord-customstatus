@@ -20,6 +20,7 @@ Animate your custom status
 
 # Config
 - token `String`: Enter your secret discord token **NEVER SHARE THIS WITH ANYONE** - [How to get your token](#how-to-get-your-token)
+- handleRatelimit `Boolean`: Set to `true` to handle Discord ratelimits, the script will wait until the ratelimit expires instead of the `timeout` value (**This is untested, so it might not work**)
 - animation `Array`:
 	- text `String`: Text to display as custom status
 	- emojiID `String|null`: Emoji ID of the emoji you want to display or `null` for nothing

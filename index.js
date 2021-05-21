@@ -1,11 +1,17 @@
 const request = require("request");
 const config = require("./config.json");
 const STATUS_URL = "https://discordapp.com/api/v8/users/@me/settings";
+let ratelimit = 1;
 
 async function loop() {
 	for (let anim of config.animation) {
-		await doRequest(anim.text, anim.emojiID, anim.emojiName).catch(console.error);
-		await new Promise(p => setTimeout(p, anim.timeout));
+		let res = await doRequest(anim.text, anim.emojiID, anim.emojiName).catch(console.error);
+		if (!res) {
+			// Die
+			return;
+		}
+
+		await new Promise(p => setTimeout(p, Math.max(ratelimit, anim.timeout)));
 	}
 
 	loop();
@@ -34,12 +40,25 @@ function doRequest(text, emojiID = null, emojiName = null) {
 				return;
 			}
 
-			if (res.statusCode !== 200) {
-				reject(new Error("Invalid Status Code: " + res.statusCode));
+			if (res.statusCode === 200) {
+				// Reset ratelimit
+				ratelimit = 1;
+				resolve(true);
 				return;
 			}
 
-			resolve(true);
+			if ((res.headers["X-RateLimit-Remaining"] || 0) <= 0 && (res.headers["X-RateLimit-Reset-After"] || 0) > 0 && config.handleRatelimit) {
+				// Ratelimited
+				ratelimit = res.headers["X-RateLimit-Reset-After"] * 1000;
+				console.log("Hit ratelimit: " + ratelimit + "ms");
+
+				// Not actually successful but whatever
+				resolve(true);
+				return;
+			}
+
+			// Panic
+			reject(new Error("Invalid Status Code: " + res.statusCode));
 		});
 	});
 }

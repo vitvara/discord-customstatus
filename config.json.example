@@ -1,5 +1,6 @@
 {
 	"token": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+	"handleRatelimit": true,
 	"animation": [
 		{
 			"text": "H",
