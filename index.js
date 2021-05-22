@@ -1,7 +1,6 @@
 const request = require("request");
 const config = require("./config.json");
 const STATUS_URL = "https://discordapp.com/api/v8/users/@me/settings";
-let ratelimit = 1;
 
 async function loop() {
 	for (let anim of config.animation) {
@@ -11,7 +10,7 @@ async function loop() {
 			return;
 		}
 
-		await new Promise(p => setTimeout(p, Math.max(ratelimit, anim.timeout)));
+		await new Promise(p => setTimeout(p, anim.timeout));
 	}
 
 	loop();
@@ -41,19 +40,19 @@ function doRequest(text, emojiID = null, emojiName = null) {
 			}
 
 			if (res.statusCode === 200) {
-				// Reset ratelimit
-				ratelimit = 1;
 				resolve(true);
 				return;
 			}
 
 			if ((res.headers["X-RateLimit-Remaining"] || 0) <= 0 && (res.headers["X-RateLimit-Reset-After"] || 0) > 0 && config.handleRatelimit) {
 				// Ratelimited
-				ratelimit = res.headers["X-RateLimit-Reset-After"] * 1000;
+				let ratelimit = res.headers["X-RateLimit-Reset-After"] * 1000;
 				console.log("Hit ratelimit: " + ratelimit + "ms");
 
-				// Not actually successful but whatever
-				resolve(true);
+				// Try again
+				setTimeout(() => {
+					doRequest(text, emojiID, emojiName).then(resolve).catch(reject);
+				}, ratelimit);
 				return;
 			}
 
