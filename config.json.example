@@ -6,31 +6,31 @@
 			"text": "H",
 			"emojiID": null,
 			"emojiName": null,
-			"timeout": 1000
+			"timeout": 10000
 		},
 		{
 			"text": "He",
 			"emojiID": null,
 			"emojiName": null,
-			"timeout": 1000
+			"timeout": 10000
 		},
 		{
 			"text": "Hel",
 			"emojiID": null,
 			"emojiName": null,
-			"timeout": 1000
+			"timeout": 10000
 		},
 		{
 			"text": "Hell",
 			"emojiID": null,
 			"emojiName": null,
-			"timeout": 1000
+			"timeout": 10000
 		},
 		{
 			"text": "Hello",
 			"emojiID": "581956534544629760",
 			"emojiName": "partyblob",
-			"timeout": 2000
+			"timeout": 20000
 		}
 	]
 }
